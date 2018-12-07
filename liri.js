@@ -1,3 +1,4 @@
+var fs = require("fs");
 require("dotenv").config();
 
 var keys = require("./keys");
@@ -6,30 +7,28 @@ var spotify = new Spotify(keys.spotify);
 var axios = require("axios");
 var moment = require("moment");
 var inquirer = require("inquirer");
+userInput(process.argv[2], process.argv[3]);
 
-var userChoice = process.argv[2];
-
-switch (userChoice) {
-  case "concert-this":
-    console.log("the concert is: ");
-
-    break;
-  case "spotify-this-song":
-    getSong();
-    break;
-  case "movie-this":
-    console.log("this movie is: ");
-
-    break;
-  case "do-what-it-says":
-    console.log("whatever");
-
-    break;
-
-  default:
-    console.log("please enter something");
-
-    break;
+function userInput(command, choice) {
+  switch (command) {
+    case "concert-this":
+      var artistChoice = choice;
+      getConcert(artistChoice);
+      break;
+    case "spotify-this-song":
+      getSong();
+      break;
+    case "movie-this":
+      var movieChoice = choice;
+      getMovie(movieChoice);
+      break;
+    case "do-what-it-says":
+      doThis();
+      break;
+    default:
+      console.log("please enter something");
+      break;
+  }
 }
 
 function getSong() {
@@ -80,4 +79,62 @@ function getSong() {
           });
       }
     });
+}
+
+function getConcert(artist) {
+  axios
+    .get(
+      "https://rest.bandsintown.com/artists/" +
+        artist +
+        "/events?app_id=2b1f624811f2f643ca41a2ea162042f2/date=upcoming"
+    )
+    .then(function(response) {
+      console.log(response.data[0].venue.name);
+      console.log(
+        response.data[0].venue.city +
+          ", " +
+          response.data[0].venue.region +
+          " " +
+          response.data[0].venue.country
+      );
+      var concertDate = moment(response.data[0].datetime).format(
+        "dddd, MMMM Do YYYY"
+      );
+      console.log(concertDate);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+}
+
+function getMovie(movieName) {
+  axios
+    .get(
+      "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy"
+    )
+    .then(function(response) {
+      console.log(response.data.Title);
+      console.log(response.data.Released);
+      // need to convert date above using moment
+      console.log("IMDB Rating: " + response.data.imdbRating);
+      console.log(
+        response.data.Ratings[1].Source +
+          " Rating: " +
+          response.data.Ratings[1].Value
+      );
+      console.log("Country: " + response.data.Country);
+      console.log("Language: " + response.data.Language);
+      console.log("Plot: " + response.data.Plot);
+      console.log("Actors: " + response.data.Actors);
+    });
+}
+
+function doThis() {
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      return console.log(error);
+    }
+    var newData = data.split(",");
+    userInput(newData[0], newData[1]);
+  });
 }
