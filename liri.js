@@ -12,6 +12,7 @@ userInput(process.argv[2], process.argv[3]);
 function userInput(command, choice) {
   switch (command) {
     case "concert-this":
+      console.log(choice);
       var artistChoice = choice;
       getConcert(artistChoice);
       break;
