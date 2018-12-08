@@ -115,8 +115,10 @@ function getMovie(movieName) {
     )
     .then(function(response) {
       console.log(response.data.Title);
-      console.log(response.data.Released);
-      // need to convert date above using moment
+      var releaseDate = moment(response.data.Released, "Do MMMM YYYY").format(
+        "MMMM Do, YYYY"
+      );
+      console.log("Release Date: " + releaseDate);
       console.log("IMDB Rating: " + response.data.imdbRating);
       console.log(
         response.data.Ratings[1].Source +
