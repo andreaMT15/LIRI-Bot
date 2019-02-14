@@ -45,7 +45,9 @@ function bands(artist) {
     .get(
       "https://rest.bandsintown.com/artists/" +
         artist.concert +
-        "/events?app_id=2b1f624811f2f643ca41a2ea162042f2/date=upcoming"
+        "/events?app_id=" +
+        keys.band.id +
+        "/date=upcoming"
     )
     .then(function(response) {
       console.log(response.data[0].venue.name);
@@ -182,22 +184,21 @@ function doThis() {
       return console.log(error);
     }
     var newData = data.split(",");
-    spotify
-      .search({
-        type: "track",
-        query: newData[1],
-        limit: 1
-      })
-      .then(function(response) {
-        console.log(response.tracks.items[0].name);
-        console.log(response.tracks.items[0].album.artists[0].name);
-        console.log(response.tracks.items[0].album.name);
-        console.log(
-          response.tracks.items[0].album.artists[0].external_urls.spotify
-        );
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
+    readRandom(newData[0]);
   });
+}
+
+function readRandom(newData, newChoice) {
+  if (newData === "concert-this") {
+    getConcert(newChoice);
+  }
+  if (newData === "spotify-this-song") {
+    getSong(newChoice);
+  }
+  if (newData === "movie-this") {
+    getMovie(newChoice);
+  }
+  if (newData === "do-what-it-says") {
+    doThis(newChoice);
+  }
 }
