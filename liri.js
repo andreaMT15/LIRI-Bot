@@ -73,7 +73,8 @@ function movieInfo(movieName) {
     .get(
       "http://www.omdbapi.com/?t=" +
         movieName.movie +
-        "&y=&plot=short&apikey=trilogy"
+        "&y=&plot=short&apikey=" +
+        keys.movie.id
     )
     .then(function(response) {
       console.log(response.data.Title);
