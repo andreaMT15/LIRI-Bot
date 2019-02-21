@@ -2,12 +2,12 @@
 
 **Developer: Andrea Minhas**
 
-**Technologies Used:**
-- Javascript
--JQuery
--Node.Js
--Inquirer NPM Package
--Moment.Js
+**Technologies Used: **
+** - Javascript **
+** - JQuery **
+** - Node.Js **
+** - Inquirer NPM Package **
+** - Moment.Js **
 
 Liri is a command line application that uses the inquier NPM package to take in user commands and queries from the command line and return data from API's. The following commands have been hard coded into the program to give the user the capability to look up songs, concerts and movie information:
 
